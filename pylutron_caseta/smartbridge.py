@@ -731,7 +731,7 @@ class Smartbridge:
             button_groups=button_groups,
             type=device_type,
             model=device_model,
-            serial=None,
+            serial="_".join((name, device_name)),
         )
 
         for button_expanded_json in button_group_json.Body["ButtonGroupsExpanded"]:
@@ -763,7 +763,7 @@ class Smartbridge:
             name=device["name"].split("_")[1],
             type=device["type"],
             model=device["model"],
-            serial=None,
+            serial=device["name"].split("_")[1],
             button_name=button_name,
             button_led=button_led,
         )
@@ -792,7 +792,7 @@ class Smartbridge:
                 button_groups=None,
                 type=zone_type,
                 model=None,
-                serial=None,
+                serial="_".join((area["name"], zone_name)),
             )
 
     async def _load_lip_devices(self):

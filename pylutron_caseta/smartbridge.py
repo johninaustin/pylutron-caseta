@@ -636,6 +636,9 @@ class Smartbridge:
     async def _load_ra3_devices(self):
         _LOG.debug("RA3 Detected")
 
+        # Load processor as devices[1] for compatibility with lutron_caseta HA integration
+        await self._load_ra3_processor()
+        
         for area in self.areas.values():
             await self._load_ra3_control_stations(area)
             await self._load_ra3_zones(area)
@@ -643,6 +646,34 @@ class Smartbridge:
         # caseta does this by default, but we need to do it manually for RA3
         await self._subscribe_to_multi_zone_status()
 
+    async def _load_ra3_processor(self):
+        # Load processor as devices[1] for compatibility with lutron_caseta HA integration
+        
+        processor_json = await self._request(
+            "ReadRequest", f"/device?where=IsThisDevice:true"
+        )
+        if processor_json.Body is None:
+            return
+        
+        processor_json = processor_json.Body["Devices"]
+        
+        level = -1
+        device_id = 1
+        fan_speed = None
+        device_name = processor_json["Name"]
+        zone_type = None
+        self.devices.setdefault(
+            device_id,
+            {"device_id": device_id, "current_state": level, "fan_speed": fan_speed},
+        ).update(
+            zone=device_id,
+            name=processor_json["Name"],
+            button_groups=None,
+            type=zone_type,
+            model=processor_json["ModelNumber"],
+            serial=processor_json["SerialNumber"],
+
+        
     async def _load_ra3_control_stations(self, area):
         # For each area, process the control stations.
         # Find button devices with buttons, ignore all other devices

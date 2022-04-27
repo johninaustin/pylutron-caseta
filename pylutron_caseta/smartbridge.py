@@ -658,7 +658,7 @@ class Smartbridge:
         processor_json = processor_json.Body["Devices"]
         
         level = -1
-        device_id = 1
+        device_id = "1"
         fan_speed = None
         device_name = processor_json["Name"]
         zone_type = None

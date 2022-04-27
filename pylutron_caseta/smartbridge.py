@@ -656,22 +656,23 @@ class Smartbridge:
             return
         
         processor_json = processor_json.Body["Devices"]
+        processor = processor_json[0]
         
         level = -1
         device_id = "1"
         fan_speed = None
-        device_name = processor_json["Name"]
+        device_name = processor["Name"]
         zone_type = None
         self.devices.setdefault(
             device_id,
             {"device_id": device_id, "current_state": level, "fan_speed": fan_speed},
         ).update(
             zone=device_id,
-            name=processor_json["Name"],
+            name=processor["Name"],
             button_groups=None,
             type=zone_type,
-            model=processor_json["ModelNumber"],
-            serial=processor_json["SerialNumber"],
+            model=processor["ModelNumber"],
+            serial=processor["SerialNumber"],
         )
 
         

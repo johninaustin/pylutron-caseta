@@ -672,6 +672,7 @@ class Smartbridge:
             type=zone_type,
             model=processor_json["ModelNumber"],
             serial=processor_json["SerialNumber"],
+        )
 
         
     async def _load_ra3_control_stations(self, area):
